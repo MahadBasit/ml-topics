@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 python_list = [1,2,3,4,5]
 numpy_array = np.array([1,2,3,4,5])
@@ -135,4 +136,38 @@ dg_dy = (g(x, y+h) - g(x, y)) / h
 
 M = np.array([[2, 0], [0, 1]])
 v = np.array([3, 4])
-print(M @ v)
+#print(M @ v)
+
+
+A = np.random.rand(300, 300)
+B = np.random.rand(300, 300)
+
+def raw_matmul(m1, m2):
+    result = []
+    for i in range(len(m1)):
+        row = []
+        for j in range(len(m2[0])):
+            total = 0
+            for k in range(len(m1[0])):
+                total += m1[i][k] * m2[k][j]
+            row.append(total)
+        result.append(row)
+    return result
+
+start = time.time()
+#raw_matmul(A, B)
+end = time.time()
+#print("raw loop:", end - start)
+
+start = time.time()
+A @ B
+end = time.time()
+#print("numpy:", end - start)
+
+
+batch = np.random.rand(4, 3)      # 4 samples, 3 features
+scaler = np.random.rand(3)        # one scale factor per feature
+scaler2 = np.random.rand(4)
+
+print(batch*scaler)
+print(batch*scaler2)
