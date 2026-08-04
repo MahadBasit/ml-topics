@@ -111,7 +111,28 @@ x = arr2.sort()
 
 a = np.array([1,2,3])
 b = np.array([4,5,6])
-
+'''
 print(np.vstack((a,b)))
 print(np.hstack((a,b)))
 print(np.column_stack((a,b)))
+'''
+
+def f(x): return x**2
+h = 0.0001
+x = 3
+slope = (f(x+h) - f(x)) / h
+
+#print(slope)
+
+def g(x, y): return x**2 + y**2
+h = 0.0001
+x, y = 2, 3
+
+dg_dx = (g(x+h, y) - g(x, y)) / h
+dg_dy = (g(x, y+h) - g(x, y)) / h
+
+#print(dg_dx, dg_dy)
+
+M = np.array([[2, 0], [0, 1]])
+v = np.array([3, 4])
+print(M @ v)
