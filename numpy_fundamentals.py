@@ -169,5 +169,5 @@ batch = np.random.rand(4, 3)      # 4 samples, 3 features
 scaler = np.random.rand(3)        # one scale factor per feature
 scaler2 = np.random.rand(4)
 
-print(batch*scaler)
-print(batch*scaler2)
+#print(batch*scaler)
+#print(batch*scaler2)
