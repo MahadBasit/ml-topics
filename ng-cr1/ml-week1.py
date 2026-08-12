@@ -18,6 +18,4 @@ def cost_function(x,y,w,b):
 
     total_cost = (1/(2*m))*cost_sum
 
-    return total_cost 
-
-print(cost_function(np.array([2,3,4,5]), np.array([300, 400, 500 ,600]), 200, 100))
+    return total_cost
