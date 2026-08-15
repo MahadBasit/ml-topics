@@ -1,7 +1,8 @@
 import numpy as np
 
-x_train = np.array([0., 1, 2, 3, 4, 5],dtype=np.longdouble)
-y_train = np.array([0,  0, 0, 1, 1, 1],dtype=np.longdouble)
+X_train = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])  #(m,n)
+y_train = np.array([0, 0, 0, 1, 1, 1])                                           #(m,)
+
 
 def sigmoid(x):
 
@@ -22,4 +23,30 @@ def compute_cost_logistic(x, y, w, b, sigmoid):
     cost = cost/m
     return cost
 
-print(compute_cost_logistic(x_train, y_train, 1, -3, sigmoid))
+
+def compute_gradient(x, y, w, b):
+    m,n = x.shape
+
+    dj_dw = np.zeros(n)
+    dj_db = 0.0
+
+    for i in range(m):
+        z_i = np.dot(x[i], w) + b
+        f_wb_i = sigmoid(z_i)
+        err = f_wb_i - y[i]
+        for j in range(n):
+            dj_dw[j] = dj_dw[j] + err*x[i,j]
+        dj_db += err
+
+    dj_dw = dj_dw/m
+    dj_db = dj_db/m
+
+    return dj_dw, dj_db
+
+X_tmp = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])
+y_tmp = np.array([0, 0, 0, 1, 1, 1])
+w_tmp = np.array([2.,3.])
+b_tmp = 1.
+dj_dw_tmp, dj_db_tmp = compute_gradient(X_tmp, y_tmp, w_tmp, b_tmp)
+print(f"dj_db: {dj_db_tmp}" )
+print(f"dj_dw: {dj_dw_tmp.tolist()}" )
