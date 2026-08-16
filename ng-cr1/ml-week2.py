@@ -40,8 +40,6 @@ def compute_gradient(X, y, w, b, lmda):
 
     return dj_dw, dj_db
 
-print(compute_gradient(X_train, y_train,np.array([ 1, 18, -5, -2]), 2, 1000))
-
 
 def gradient_descent(X, y, w_in, b_in, num_iters, alpha, lmda):
     J_hist = []
@@ -50,7 +48,7 @@ def gradient_descent(X, y, w_in, b_in, num_iters, alpha, lmda):
     b = b_in
 
     for i in range(num_iters):
-        dj_dw, dj_db = compute_gradient(X, y, w, b)
+        dj_dw, dj_db = compute_gradient(X, y, w, b, lmda)
         w = w - alpha*dj_dw
         b = b - alpha*dj_db
 
@@ -81,9 +79,8 @@ initial_b = 0.
 iterations = 500
 alpha = 0.1
 # run gradient descent 
-#w_final, b_final, J_hist = gradient_descent(X_scaled, y_train, initial_w, initial_b, iterations, alpha, lmda=0)
-#print(f"b,w found by gradient descent: {b_final:0.2f},{w_final} ")
-#m,_ = X_train.shape
-#for i in range(m):
-#    print(f"prediction: {np.dot(X_scaled[i], w_final) + b_final:0.2f}, target value: {y_train[i]}")
-
+w_final, b_final, J_hist = gradient_descent(X_scaled, y_train, initial_w, initial_b, iterations, alpha, lmda=0)
+print(f"b,w found by gradient descent: {b_final:0.2f},{w_final} ")
+m,_ = X_train.shape
+for i in range(m):
+    print(f"prediction: {np.dot(X_scaled[i], w_final) + b_final:0.2f}, target value: {y_train[i]}")
