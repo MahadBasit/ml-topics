@@ -10,17 +10,18 @@ def sigmoid(x):
 
     return g
 
-def compute_cost_logistics(x, y, w, b):
+def compute_cost_logistics(x, y, w, b, lmbda):
     m = x.shape[0]
     cost = 0.0
     for i in range(m):
         z_i = np.dot(x[i],w) + b
         f_wb_i = sigmoid(z_i)
         cost += -y[i]*(np.log(f_wb_i)) - (1-y[i])*(np.log(1-f_wb_i))
+    cost = cost + (lmbda/2)*(np.dot(w,w))
     cost = cost/m
     return cost
 
-def compute_gradient_logistics(x, y, w, b):
+def compute_gradient_logistics(x, y, w, b, lmda):
     m,n = x.shape
     dj_dw = np.zeros(n)
     dj_db = 0.0
@@ -33,24 +34,29 @@ def compute_gradient_logistics(x, y, w, b):
             dj_dw[j] = dj_dw[j] + err*x[i,j]
         dj_db += err
 
+    for j in range(n):
+        dj_dw[j] += lmda*w[j]
+
     dj_dw = dj_dw/m
     dj_db = dj_db/m
 
     return dj_dw, dj_db
 
-def gradient_descent_logistics(x, y, w_in, b_in, num_iters, alpha):
+print(compute_gradient_logistics(X_train, y_train, [2,4], -4, 5))
+
+def gradient_descent_logistics(x, y, w_in, b_in, num_iters, alpha, lmda):
     
     J_hist = []
     w = w_in
     b = b_in
 
     for i in range(num_iters):
-        dj_dw, dj_db = compute_gradient_logistics(x,y,w,b)
+        dj_dw, dj_db = compute_gradient_logistics(x,y,w,b, lmda)
         w = w - alpha*dj_dw
         b = b - alpha*dj_db
 
         if i < 10000:
-            J_hist.append(compute_cost_logistics(x,y,w,b))
+            J_hist.append(compute_cost_logistics(x,y,w,b, lmda))
 
         if i % math.ceil(num_iters/10) == 0:
             print(f"Iteration {i:4d}: Cost {J_hist[-1]:8.2f}")
@@ -62,5 +68,5 @@ b_tmp  = 0.
 alph = 0.1
 iters = 10000
 
-w_out, b_out, _ = gradient_descent_logistics(X_train, y_train, w_tmp, b_tmp,iters, alph) 
-print(f"\nupdated parameters: w:{w_out}, b:{b_out}")
+#w_out, b_out, _ = gradient_descent_logistics(X_train, y_train, w_tmp, b_tmp,iters, alph, lmda=1000) 
+#print(f"\nupdated parameters: w:{w_out}, b:{b_out}")

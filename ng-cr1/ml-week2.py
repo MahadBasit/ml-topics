@@ -7,18 +7,19 @@ y_train = np.array([460, 232, 178])
 b_init = 785.1811367994083
 w_init = np.array([ 0.39133535, 18.75376741, -53.36032453, -26.42131618])
 
-def compute_cost(X, y, w, b): 
+def compute_cost(X, y, w, b, lmda): 
    
     m = X.shape[0]
     cost = 0.0
     for i in range(m):                                
         f_wb_i = np.dot(X[i], w) + b           
-        cost = cost + (f_wb_i - y[i])**2       
+        cost = cost + (f_wb_i - y[i])**2
+    cost = cost + lmda*np.dot(w,w)      
     cost = cost / (2 * m)                      
     return cost
 
 
-def compute_gradient(X, y, w, b):
+def compute_gradient(X, y, w, b, lmda):
 
     m,n = X.shape
     dj_dw = np.zeros((n))
@@ -31,13 +32,18 @@ def compute_gradient(X, y, w, b):
             dj_dw[j] = dj_dw[j] + err*X[i, j]
         dj_db += err
 
+    for j in range(n):
+        dj_dw[j] += lmda*w[j]
+
     dj_dw = dj_dw/m
     dj_db = dj_db/m 
 
     return dj_dw, dj_db
 
+print(compute_gradient(X_train, y_train,np.array([ 1, 18, -5, -2]), 2, 1000))
 
-def gradient_descent(X, y, w_in, b_in, num_iters, alpha, compute_cost, compute_gradient):
+
+def gradient_descent(X, y, w_in, b_in, num_iters, alpha, lmda):
     J_hist = []
 
     w = w_in
@@ -49,7 +55,7 @@ def gradient_descent(X, y, w_in, b_in, num_iters, alpha, compute_cost, compute_g
         b = b - alpha*dj_db
 
         if i < 100000:
-            J_hist.append(compute_cost(X, y, w, b))
+            J_hist.append(compute_cost(X, y, w, b, lmda))
 
         if i % math.ceil(num_iters/10) == 0:
             print(f"Iteration {i:4d}: Cost {J_hist[-1]:8.2f}   ")
@@ -75,7 +81,7 @@ initial_b = 0.
 iterations = 500
 alpha = 0.1
 # run gradient descent 
-w_final, b_final, J_hist = gradient_descent(X_scaled, y_train, initial_w, initial_b, iterations, alpha, compute_cost, compute_gradient)
+#w_final, b_final, J_hist = gradient_descent(X_scaled, y_train, initial_w, initial_b, iterations, alpha, lmda=0)
 #print(f"b,w found by gradient descent: {b_final:0.2f},{w_final} ")
 #m,_ = X_train.shape
 #for i in range(m):
